@@ -1,4 +1,5 @@
 #include <iostream>
+#include<malloc.h>
 
 using namespace std;
 
@@ -61,11 +62,50 @@ void mostrar()
             auxiliar = auxiliar->siguiente;
         }
         auxiliar = NULL; free(auxiliar);
-    }
+    }else{cout<<"la lista esta vacia"<<endl;}
 
 }
 
-void ordenar(){}
+void ordenar()
+{
+    if(cabeza != NULL)
+    {
+        int tmpDestino = 0;
+        int tmpDocumento = 0;
+        char tmpNombre[10];
+        auxiliar2 = cabeza;
+        while (auxiliar2 != NULL)
+        {
+            auxiliar = cabeza;
+            while(auxiliar->siguiente != NULL)
+            {
+                if(auxiliar->destino > auxiliar->siguiente->destino)
+                {
+                    tmpDestino = auxiliar->destino;
+                    tmpDocumento = auxiliar->documento;
+                    for(int x = 0; x < 10; x++){tmpNombre[x] = auxiliar->nombre[x];}  
+                    
+
+                    auxiliar->destino = auxiliar->siguiente->destino;
+                    for(int x = 0; x<10; x++){auxiliar->nombre[x] = auxiliar->siguiente->nombre[x];} 
+                    auxiliar->documento = auxiliar->siguiente->documento;
+
+
+                    auxiliar->siguiente->destino = tmpDestino;                  
+                    for(int x = 0; x < 10; x++){auxiliar->siguiente->nombre[x] = tmpNombre[x];} 
+                    auxiliar->siguiente->documento = tmpDocumento;
+                }
+
+                auxiliar = auxiliar->siguiente;
+            }
+            auxiliar2 = auxiliar2->siguiente;
+        }
+
+        auxiliar = auxiliar2 = NULL;free(auxiliar);free(auxiliar2);
+        
+
+    }else{cout<<"la lista esta vacia"<<endl;}
+}
 
 int main()
 {
@@ -73,7 +113,7 @@ int main()
     do
     {
         cout<<'\t'<<"*****MENU*****"<<endl;
-        cout<<"1. Ingresar Pasajero"<<'\n'<<"2. Mostrar lsita de  Pasajeros"<<'\n'<<"3. Ordenar lsita de Pasajeros"<<endl;
+        cout<<"1. Ingresar Pasajero"<<'\n'<<"2. Mostrar lista de  Pasajeros"<<'\n'<<"3. Ordenar lista de Pasajeros"<<endl;
         cout<<"0. salir"<<endl;
         cin>>opcion;
 
@@ -85,7 +125,7 @@ int main()
         case 2:{mostrar();}
             break;
 
-        case 3:{ordenar();}
+        case 3:{ordenar();mostrar();}
             break;
         }
 
