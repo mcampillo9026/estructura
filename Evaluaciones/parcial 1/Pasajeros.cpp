@@ -44,7 +44,26 @@ void registrar()
 
 }
 
-void mostrar(){}
+void mostrar()
+{
+    auxiliar = cabeza;
+    int item = 0;
+    if(cabeza != NULL)
+    {
+        cout<<"item"<<'\t'<<"Documentos"<<'\t'<<"Nombre"<<'\t'<<"Destino"<<endl;
+        while (auxiliar != NULL)
+        {
+            item++;
+            cout<<item<<'\t';
+            cout<<auxiliar->documento<<'\t'<<'\t';
+            cout<<auxiliar->nombre<<'\t';
+            cout<<auxiliar->destino<<endl;
+            auxiliar = auxiliar->siguiente;
+        }
+        auxiliar = NULL; free(auxiliar);
+    }
+
+}
 
 void ordenar(){}
 
