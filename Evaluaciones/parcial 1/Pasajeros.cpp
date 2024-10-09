@@ -79,7 +79,7 @@ void ordenar()
             auxiliar = cabeza;
             while(auxiliar->siguiente != NULL)
             {
-                if(auxiliar->destino > auxiliar->siguiente->destino)
+                if((auxiliar->destino > auxiliar->siguiente->destino)||((auxiliar->destino == auxiliar->siguiente->destino) && auxiliar->documento > auxiliar->siguiente->documento))
                 {
                     tmpDestino = auxiliar->destino;
                     tmpDocumento = auxiliar->documento;
