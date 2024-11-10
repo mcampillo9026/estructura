@@ -9,7 +9,7 @@ struct paciente
     paciente *izq, *der = NULL;
 };
 
-paciente *raiz;
+paciente *raiz, *aux, *padre;
 
 int posicionar(paciente *r , paciente *a)
 {
@@ -64,39 +64,48 @@ void registrar()
     }
 }
 
-void mostrar(paciente *r)
-{
-        
+void mostrarP(paciente *r)
+{        
     if(r->der != NULL)
     {
-        mostrar(r->der);
+        mostrarP(r->der);
     }
     cout<<r->nombre<<'\t'<<r->nuip<<'\t'<<r->edad<<endl;   
 
     if(r->izq != NULL)
     {
-        mostrar(r->izq);
-
+        mostrarP(r->izq);
     }
-
 }
 
-int buscarP(paciente *a, int dato)
+void mostrar()
+{
+    if(!raiz)
+    {
+        cout<<"no hay pacientes registrados"<<endl;
+    }
+    else
+    {
+        cout<<"Nombre"<<'\t'<<"NUIP"<<'\t'<<"edad"<<endl;mostrarP(raiz);
+    }
+}
+
+int buscarPaciente(paciente *a, int dato)
 {
     
     if(a->nuip == dato)
     {
-        cout<<"nombre: "<<a->nombre<<'\n'<<"NUIP: "<<a->nuip<<'\n'<<"Edad: "<<a->edad<<endl;
+        aux = a;
         return 0;
     }else
     {
         if(a->izq != NULL)
         {
-            buscarP(a->izq,dato);            
+            buscarPaciente(a->izq,dato);            
         }
         if(a->der != NULL)
         {
-            buscarP(a->der,dato);
+            buscarPaciente(a->der,dato);
         }
     }
     return 0;
@@ -104,11 +113,87 @@ int buscarP(paciente *a, int dato)
 
 void buscar()
 {
-    cout<<"ingrese el NUIP del paciente: ";
-    int nuip;
-    cin>>nuip;
-    buscarP(raiz,nuip);
+    if(raiz)
+    {
+        cout<<"ingrese el NUIP del paciente: ";
+        int nuip;
+        cin>>nuip;
+        buscarPaciente(raiz,nuip);
+        if(aux)
+        {
+            cout<<"nombre: "<<aux->nombre<<'\n'<<"NUIP: "<<aux->nuip<<'\n'<<"Edad: "<<aux->edad<<endl;
+        }else
+        {
+            cout<<"el paciente no existe"<<endl;
+        }
+    }else
+    {
+        cout<<"no hay pacientes registrados"<<endl;
+    }  
+}
 
+int buscarHijos()
+{
+    if((aux->der == NULL) && (aux->izq == NULL))
+    {
+        return 0;
+    }else
+    {
+        if((aux->der == NULL) || (aux->izq == NULL))
+        {
+            return 1;
+        }else
+        {
+            return 2;
+        }
+    }
+}
+
+void buscarPadre(paciente *r)
+{
+    padre = NULL;
+    if(r == aux)
+    {
+        padre = NULL;
+    }else
+    {
+        if((r->der == aux) || (r->izq == aux))
+        {
+            padre = r;
+        }else
+        {
+            if(r->izq != NULL)
+            {
+                buscarPadre(r->izq);
+            }
+
+            if(r->der != NULL)
+            {
+                buscarPadre(r->der);
+            }
+        }        
+    }
+}
+
+void eliminarPaciente()
+{
+    buscar();
+    int hijos = buscarHijos();
+    buscarPadre(raiz);
+    if(!((aux == NULL) || (padre == NULL)))
+    {   
+        if(hijos == 0)
+        {
+            if(padre->der == aux)
+            {
+                padre->der = NULL;
+            }else
+            {
+                padre->izq = NULL;
+            }
+        }
+        aux = NULL; free(aux);
+    }
 }
 
 int main()
@@ -120,6 +205,7 @@ int main()
         cout<<"1. registrar pacientes"<<endl;
         cout<<"2. mostrar pacientes"<<endl;
         cout<<"3. buscar pacientes"<<endl;
+        cout<<"4. eliminar pacientes"<<endl;
         cout<<"0. salir"<<endl;
         cin>>opcion;
 
@@ -134,11 +220,15 @@ int main()
                 break;
 
             case 2:
-                {cout<<"Nombre"<<'\t'<<"NUIP"<<'\t'<<"edad"<<endl;mostrar(raiz);}
+                {mostrar();}
                 break;
 
             case 3:
                 {buscar();}
+                break;
+
+            case 4:
+                {eliminarPaciente();}
                 break;
 
             default:
